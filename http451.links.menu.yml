@@ -1,0 +1,5 @@
+http451.form:
+  title: http451 Settings
+  description: Configure the settings for http451 module
+  route_name: http451.form
+  parent: system.admin_config_system

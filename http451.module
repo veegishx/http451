@@ -1,0 +1,16 @@
+<?php
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+
+ function http451_help($route_name, RouteMatchInterface $route_match) {
+     switch($route_name) {
+         case 'help.page.censorship_http451' :
+            return t('
+            <h3> About </h3>
+            <p>This Drupal module implements http 451 handling as defined by <a href="https://tools.ietf.org/html/rfc7725">RFC 7725</a></p>
+            ');
+     }
+ }

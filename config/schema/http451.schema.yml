@@ -1,0 +1,23 @@
+http451.settings:
+  type: config_object
+  label: 'HTTP451 Settings'
+  mapping:
+    http451:
+      type: mapping
+      mapping:
+        page_title:
+          type: text
+          label: 'Default title for HTTP451 status page:'
+        page_content:
+          type: text
+          label: 'Default message for HTTP451 error page:'
+        page_status:
+          type: text
+          label: 'Server HTTP 451 Response code'
+block.settings.http451:
+  type: block_settings
+  label: 'HTTP451 block'
+  mapping:
+    http451_block_settings:
+      type: text
+      label: 'HTTP451 block settings'

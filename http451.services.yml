@@ -1,0 +1,5 @@
+services:
+  http451.event_subscriber:
+    class: Drupal\http451\EventSubscriber\Http451RedirectSubscriber
+    tags:
+      - { name: event_subscriber }

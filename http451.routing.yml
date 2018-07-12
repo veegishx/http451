@@ -1,0 +1,17 @@
+# TODO: Route for Http451Controller functions
+# Route for module configuration
+http451.form:
+  path: '/admin/config/system/http451'
+  defaults:
+    _form: 'Drupal\http451\Form\Http451Form'
+    _title: 'HTTP451 Configuration settings'
+  requirements:
+    _permission: 'configure_http451'
+
+http451.content:
+  path: '/node/123'
+  defaults:
+    _title: '451 Unavailable for legal reasons'
+    _controller: '\Drupal\http451\Controller\Http451Controller::http451'
+  requirements: 
+    _permission: 'access_content'

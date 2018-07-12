@@ -1,0 +1,7 @@
+name: Http 451
+description: This module allows pages to display a http 451 error message
+package: Http451
+type: module
+core: 8.x
+
+configure: http451.form

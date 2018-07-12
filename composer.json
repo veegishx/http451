@@ -1,0 +1,13 @@
+{
+    "name": "veegish/censorship_http451",
+    "description": "A drupal module to handle http 451 responses",
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "veegishx",
+            "email": "veegish240@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
