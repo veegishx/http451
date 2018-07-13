@@ -77,21 +77,28 @@ class Http451Form extends ConfigFormBase {
         $authority = $form_state->getValue('blocking_authority');
         $title = $form_state->getValue('page_title');
         $content = $form_state->getValue('page_content');
-        if(is_writable("$root_dir/$filename")) {
-            $stdin = fopen("$root_dir/$filename", "a+");
+
+        // Make sure the directory is writable
+        // sudo chown -R www-data:www-data Form 
+        // Append data to blocked_ids.json
+        if(is_writable("$root_dir")) {
+            $current_data = file_get_contents("$root_dir/$filename");
+            $data_array = json_decode($current_data, true);
             $data = array(
                 "nid" => $id,
                 "authority" => $authority,
                 "title" => $title,
-                "content" => $content
+                "content" => $content,
             );
-            fwrite($stdin, json_encode($data));
-            fclose($stdin);
+            $data_array[] = $data;
+            $data_array = json_encode($data_array, JSON_PRETTY_PRINT);
+            file_put_contents("$root_dir/$filename", $data_array);
             drupal_set_message(t('WARNING: Resource has been successfully blocked!'), 'warning');
             return true;
         } else {
             drupal_set_message(t('Error: Please make sure that the module directory is writable. PATH:' . "$root_dir/$filename"), 'error');
         }
         return parent::submitForm($form, $form_state);
+        
     }
 }

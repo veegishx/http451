@@ -22,7 +22,7 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
     }
 
     /**
-   * Redirect requests for my_content_type node detail pages to node/123.
+   * 
    *
    * @param GetResponseEvent $event
    * @return void
@@ -35,17 +35,14 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
         if ($request->attributes->get('_route') !== 'entity.node.canonical') {
             return;
         } else {
-            $current_nodeId = $request->attributes->get('node')->id();
+            $current_nodeId = (string) $request->attributes->get('node')->id();
         }
 
         // Read blocked ids from blocked_ids.json file
-        $root_dir = realpath(dirname(__FILE__));
-        if(file_exists("$root_dir/$filename")) {
-            $blocked_ids = json_decode(file_get_contents("$root_dir/$filename"));
-        }
-
-        if ($request->attributes->get('node')->id() !== '4') {
-            return;
+        $root_dir = dirname(__DIR__);
+        if(file_exists("$root_dir" . '/Form' . "/$filename")) {
+            $file = file_get_contents("$root_dir" . '/Form' . "/$filename");
+            $blocked_nodes = json_decode($file, true);
         }
     
         // This is where you set the destination.
@@ -54,17 +51,19 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
         $response->setContent('<html>
         <head><title>Unavailable For Legal Reasons</title></head>
         <body>
-        <h1>Unavailable For Legal Reasons</h1><h3>Article with ID '.$current_nodeId.' has been censored</h3>
+        <h1>Unavailable For Legal Reasons</h1><h3>Article with ID '.$current_nodeId. ' has been censored</h3>
         <p>This request may not be serviced in the Roman Province
             of Judea due to the Lex Julia Majestatis, which disallows
             access to resources hosted on servers deemed to be
-            operated by the People\'s Front of Judea.</p><h1></h1>
+            operated by the People\'s Front of Judea.</p>' . var_dump($blocked_nodes) . '
         </body>
         </html>');
         
         $response->setStatusCode(Response::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS, 'Unavailable For Legal Reasons');
 
         $response->headers->set('Content-Type', 'text/html');
+
+        $response->prepare($request);
 
         $response->send();
     }

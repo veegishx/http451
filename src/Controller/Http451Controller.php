@@ -25,10 +25,6 @@ class Http451Controller extends ControllerBase {
       <head><title>Unavailable For Legal Reasons</title></head>
       <body>
        <h1>Unavailable For Legal Reasons</h1><h3>Article with ID '.$node_id.' has been censored</h3>
-       <p>This request may not be serviced in the Roman Province
-         of Judea due to the Lex Julia Majestatis, which disallows
-         access to resources hosted on servers deemed to be
-         operated by the People\'s Front of Judea.</p><h1></h1>
        </body>
        </html>');
        
