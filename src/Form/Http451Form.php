@@ -33,15 +33,16 @@ class Http451Form extends ConfigFormBase {
         $config = $this->config('http451.settings');
         $form['content_id'] = array (
             '#type' => 'textfield',
-            '#title' => $this->t('Blocked Post IDs: '),
+            '#title' => $this->t('Blocked Post ID: '),
+            '#description' => $this->t('Enter the ID of the resource you wish to block'),
             '#required' => TRUE,
         );
 
         $form['blocking_authority'] = array(
             '#type' => 'textfield',
-            '#title' => $this->t('Name of Authority: '),
+            '#title' => $this->t('URL of Authority: '),
             '#required' => TRUE,
-            '#description' => $this->t('You need to specify the name of the authority who requested the takedown.'),
+            '#description' => $this->t('You need to specify the URL of the authority who requested the takedown.'),
         );
 
         $form['page_title'] = array(

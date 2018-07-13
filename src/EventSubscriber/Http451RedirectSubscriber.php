@@ -43,28 +43,39 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
         if(file_exists("$root_dir" . '/Form' . "/$filename")) {
             $file = file_get_contents("$root_dir" . '/Form' . "/$filename");
             $blocked_nodes = json_decode($file, true);
+            foreach($blocked_nodes as $key) {
+                if($key["nid"] == $current_nodeId) {
+                    $response = new Response();
+
+                    $response->setContent('<html>
+                    <head><title>Unavailable For Legal Reasons</title></head>
+                    <body>
+                    <h1>Unavailable For Legal Reasons</h1>
+                    <p>This request may not be serviced in the Roman Province
+                        of Judea due to the Lex Julia Majestatis, which disallows
+                        access to resources hosted on servers deemed to be
+                        operated by the People\'s Front of Judea.</p>
+                        <h4>Resource title:' . $key["title"] . '</h4>
+                        <p>This resource has been blocked as requested by:'. $key["authority"] . '</p>
+                    </body>
+                    </html>');
+                    
+                    $response->setStatusCode(Response::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS, 'Unavailable For Legal Reasons');
+
+                    $response->headers->set('Content-Type', 'text/html');
+
+                    $response->prepare($request);
+
+                    $response->send();
+                } else {
+                    return;
+                }
+            }
         }
+
+
     
         // This is where you set the destination.
-        $response = new Response();
-
-        $response->setContent('<html>
-        <head><title>Unavailable For Legal Reasons</title></head>
-        <body>
-        <h1>Unavailable For Legal Reasons</h1><h3>Article with ID '.$current_nodeId. ' has been censored</h3>
-        <p>This request may not be serviced in the Roman Province
-            of Judea due to the Lex Julia Majestatis, which disallows
-            access to resources hosted on servers deemed to be
-            operated by the People\'s Front of Judea.</p>' . var_dump($blocked_nodes) . '
-        </body>
-        </html>');
         
-        $response->setStatusCode(Response::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS, 'Unavailable For Legal Reasons');
-
-        $response->headers->set('Content-Type', 'text/html');
-
-        $response->prepare($request);
-
-        $response->send();
     }
 }
