@@ -55,8 +55,8 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
                         of Judea due to the Lex Julia Majestatis, which disallows
                         access to resources hosted on servers deemed to be
                         operated by the People\'s Front of Judea.</p>
-                        <h4>Resource title:' . $key["title"] . '</h4>
-                        <p>This resource has been blocked as requested by:'. $key["authority"] . '</p>
+                        <h4>Resource title: ' . $request->attributes->get('node')->getTitle() . '</h4>
+                        <p>This resource has been blocked as requested by: <a href="'. $key["authority"] . '">' . $key["authority"] . '</a></p>
                     </body>
                     </html>');
                     

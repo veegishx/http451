@@ -13,4 +13,6 @@ This is a basic implementation of [RFC 7725](https://tools.ietf.org/html/rfc7725
 ## Usage
 * Go to `configuration->System->http451 Settings` and fill in the form to block a post and return a HTTP 451 status
 
-![configuration_screenshot](screenshot.png "Logo Title Text 1")
+![configuration_screenshot](configuration_screenshot.png "Configuration Page")
+![result_screenshot](result_screenshot.png "Result Page")
+
