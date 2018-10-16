@@ -30,7 +30,9 @@ class Http451Form extends ConfigFormBase {
         $form = parent::buildForm($form, $form_state);
 
         // Default parameters
-        $config = $this->config('http451.settings');
+        $config = \Drupal::config('http451.settings');
+        $default_title = $config->get('page_title');
+        $default_content = $config->get('page_content');
         $form['content_id'] = array (
             '#type' => 'textfield',
             '#title' => $this->t('Blocked Post ID: '),
@@ -48,14 +50,14 @@ class Http451Form extends ConfigFormBase {
         $form['page_title'] = array(
             '#type' => 'textfield',
             '#title' => $this->t('Censored page title: '),
-            '#default_value' => $config->get('http451.page_title'),
+            '#default_value' => $default_title,
             '#description' => $this->t('If you wish to use a custom non-standard title to show up on this page, you can set it here.'),
         );
 
         $form['page_content'] = array(
             '#type' => 'textarea',
             '#title' => $this->t('Reason for censorship: '),
-            '#default_value' => $config->get('http451.page_content'),
+            '#default_value' => $default_content,
             '#description' => $this->t('If you wish to use a custom message to show up on this page, you can set it here.'),
         );
 

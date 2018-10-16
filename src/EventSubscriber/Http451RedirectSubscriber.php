@@ -36,46 +36,30 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
             return;
         } else {
             $current_nodeId = (string) $request->attributes->get('node')->id();
-        }
+            // Read blocked ids from blocked_ids.json file
+            $root_dir = dirname(__DIR__);
+            if(file_exists("$root_dir" . '/Form' . "/$filename")) {
+                $file = file_get_contents("$root_dir" . '/Form' . "/$filename");
+                $blocked_nodes = json_decode($file, true);
+                foreach($blocked_nodes as $key) {
+                    if($key["nid"] == $current_nodeId) {
+                        $response = new Response();
 
-        // Read blocked ids from blocked_ids.json file
-        $root_dir = dirname(__DIR__);
-        if(file_exists("$root_dir" . '/Form' . "/$filename")) {
-            $file = file_get_contents("$root_dir" . '/Form' . "/$filename");
-            $blocked_nodes = json_decode($file, true);
-            foreach($blocked_nodes as $key) {
-                if($key["nid"] == $current_nodeId) {
-                    $response = new Response();
+                        $response->setContent($key["content"] . '<h4>Resource title: ' . $request->attributes->get('node')->getTitle() . '</h4>
+                            <p>This resource has been blocked as requested by: <a href="'. $key["authority"] . '">' . $key["authority"] . '</a></p>');
+                        
+                        $response->setStatusCode(Response::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS, 'Unavailable For Legal Reasons');
 
-                    $response->setContent('<html>
-                    <head><title>Unavailable For Legal Reasons</title></head>
-                    <body>
-                    <h1>Unavailable For Legal Reasons</h1>
-                    <p>This request may not be serviced in the Roman Province
-                        of Judea due to the Lex Julia Majestatis, which disallows
-                        access to resources hosted on servers deemed to be
-                        operated by the People\'s Front of Judea.</p>
-                        <h4>Resource title: ' . $request->attributes->get('node')->getTitle() . '</h4>
-                        <p>This resource has been blocked as requested by: <a href="'. $key["authority"] . '">' . $key["authority"] . '</a></p>
-                    </body>
-                    </html>');
-                    
-                    $response->setStatusCode(Response::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS, 'Unavailable For Legal Reasons');
+                        $response->headers->set('Content-Type', 'text/html');
 
-                    $response->headers->set('Content-Type', 'text/html');
+                        $response->headers->set('Link', '<' . $key['authority'] . '>' . 'rel="blocked-by"');
 
-                    $response->prepare($request);
+                        $response->prepare($request);
 
-                    $response->send();
-                } else {
-                    return;
+                        $response->send();
+                    } 
                 }
             }
-        }
-
-
-    
-        // This is where you set the destination.
-        
+        } 
     }
 }
