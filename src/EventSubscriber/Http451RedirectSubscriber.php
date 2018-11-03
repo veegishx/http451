@@ -11,6 +11,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpFoundation\Response;
+use Drupal\http451\Controller\Http451Controller;
 
 class Http451RedirectSubscriber implements EventSubscriberInterface {
     public static function getSubscribedEvents() {
@@ -48,7 +49,7 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
             return;
         }
 
-        $file = file_get_contents("$root_dir" . '/Form' . "/$filename");
+        $file = file_get_contents($file_path);
         $blocked_nodes = json_decode($file, TRUE);
         foreach($blocked_nodes as $key) {
             if($key["page_id"] == $current_node_id) {
