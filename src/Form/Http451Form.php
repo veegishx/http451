@@ -85,22 +85,46 @@ class Http451Form extends ConfigFormBase {
         // sudo chown -R www-data:www-data Form 
         // Append data to blocked_ids.json
         if(is_writable("$root_dir")) {
-            $current_data = file_get_contents("$root_dir/$filename");
-            $data_array = json_decode($current_data, true);
-            $data = array(
-                "nid" => $id,
-                "authority" => $authority,
-                "title" => $title,
-                "content" => $content,
-            );
-            $data_array[] = $data;
-            $data_array = json_encode($data_array, JSON_PRETTY_PRINT);
-            file_put_contents("$root_dir/$filename", $data_array);
-            drupal_set_message(t('WARNING: Resource has been successfully blocked!'), 'warning');
-            return true;
+            // Check if file exists
+            if(file_exists("$root_dir/$filename")) {
+                $current_data = file_get_contents("$root_dir/$filename");
+                $data_array = json_decode($current_data, true);
+                foreach($data_array as $node => $attribute) {
+                    if($attribute["nid"] == "$id") {
+                        $data_array[$node]['authority'] = $authority;
+                        $data_array[$node]['title'] = $title;
+                        $data_array[$node]['content'] = $content;
+                    }
+                }
+
+                file_put_contents("$root_dir/$filename", json_encode($data_array, JSON_PRETTY_PRINT));
+                
+                if(file_put_contents("$root_dir/$filename", json_encode($data_array, JSON_PRETTY_PRINT))) {
+                    drupal_set_message(t('SUCCESS: Message for blocked resource updated!'), 'status');
+                } else {
+                    drupal_set_message(t('ERROR: Could not update the page for this blocked resource'), 'error');
+                }    
+            } else {
+                // create the blocked_ids.json file 
+                $current_data = file_get_contents("$root_dir/$filename");
+                $data_array = json_decode($current_data, true);
+                $data = array(
+                    "nid" => $id,
+                    "authority" => $authority,
+                    "title" => $title,
+                    "content" => $content,
+                );
+                $data_array[] = $data;
+                $data_array = json_encode($data_array, JSON_PRETTY_PRINT);
+                file_put_contents("$root_dir/$filename", $data_array);
+                drupal_set_message(t('SUCCESS: Resource has been successfully blocked!'), 'status');
+                return true;
+            }
+            
         } else {
             drupal_set_message(t('Error: Please make sure that the module directory is writable. PATH:' . "$root_dir/$filename"), 'error');
         }
+
         return parent::submitForm($form, $form_state);
         
     }
