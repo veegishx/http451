@@ -26,7 +26,8 @@ class Http451Form extends ConfigFormBase {
          * Custom page message
          * -----------------------------------
          *
-         * */
+         *
+        */
         // Invoking Form constructor
         $form = parent::buildForm($form, $form_state);
 
@@ -38,21 +39,21 @@ class Http451Form extends ConfigFormBase {
             '#type' => 'textfield',
             '#title' => $this->t('Blocked Post ID: '),
             '#description' => $this->t('Enter the ID of the resource you wish to block'),
-            '#required' => true
+            '#required' => TRUE,
         ];
 
         $form['blocked_by'] = [
             '#type' => 'url',
             '#title' => $this->t('URL of Authority Implementing Takedown '),
             '#description' => $this->t('You need to specify the URL of the entity who implemented the takedown.'),
-            '#required' => true,
+            '#required' => TRUE,
         ];
 
         $form['blocking_authority'] = [
             '#type' => 'url',
             '#title' => $this->t('URL of Authority: '),
             '#description' => $this->t('You need to specify the URL of the authority who requested the takedown.'),
-            '#required' => true,
+            '#required' => TRUE,
         ];
 
         $form['page_title'] = [
@@ -97,16 +98,16 @@ class Http451Form extends ConfigFormBase {
             return parent::submitForm($form, $form_state);
         }
 
-        $is_page_already_blocked = false;
+        $is_page_already_blocked = FALSE;
         // Check if file exists
         if(file_exists("$root_dir/$filename")) {
             $current_data = file_get_contents("$root_dir/$filename");
-            $data_array = json_decode($current_data, true);
+            $data_array = json_decode($current_data, TRUE);
 
             // Check if this page was already blocked before; if so update details.
             foreach($data_array as $node => $attribute) {
                 if($attribute['page_id'] == $values['page_id']) {
-                    $is_page_already_blocked = true;
+                    $is_page_already_blocked = TRUE;
                     $data_array[$node] = $values;
                 }
             }
@@ -120,7 +121,7 @@ class Http451Form extends ConfigFormBase {
         $is_file_write_successful = (bool) file_put_contents("$root_dir/$filename", $data_array);
         if($is_file_write_successful) {
             drupal_set_message($this->t('SUCCESS: Message for blocked resource updated!'), 'status');
-            return true;
+            return TRUE;
         } else {
             drupal_set_message($this->t('ERROR: Could not update the page for this blocked resource'), 'error');
         }

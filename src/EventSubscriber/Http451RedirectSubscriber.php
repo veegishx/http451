@@ -22,47 +22,38 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
     }
 
     /**
-   * 
-   *
-   * @param GetResponseEvent $event
-   * @return void
-   */
+     *
+     *
+     * @param GetResponseEvent $event
+     * @return void
+     */
     public function redirectMyContentTypeNode(GetResponseEvent $event) {
         $request = $event->getRequest();
-        $filename = 'blocked_ids.json';
-    
-        // prevents pages like "edit", "revisions", etc from bring redirected.
-        if ($request->attributes->get('_route') !== 'entity.node.canonical') {
+
+        // Prevent pages like "edit", "revisions", etc from being redirected.
+        $is_node = $request->attributes->get('_route') == 'entity.node.canonical';
+        if (!$is_node) {
             return;
-        } else {
-            $current_nodeId = (string) $request->attributes->get('node')->id();
-            // Read blocked ids from blocked_ids.json file
-            $root_dir = dirname(__DIR__);
-            if(file_exists("$root_dir" . '/Form' . "/$filename")) {
-                $file = file_get_contents("$root_dir" . '/Form' . "/$filename");
-                $blocked_nodes = json_decode($file, true);
-                foreach($blocked_nodes as $key) {
-                    if($key["nid"] == $current_nodeId) {
-                        $response = new Response();
+        }
 
-                        $response->setContent($key["content"] . '<h4>Resource title: ' . $request->attributes->get('node')->getTitle() . '</h4>
-                            <p>This resource has been blocked as requested by: <a href="'. $key["authority"] . '">' . $key["authority"] . '</a></p>');
-                        
-                        $response->setStatusCode(Response::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS, 'Unavailable For Legal Reasons');
+        $current_node_id = (string) $request->attributes->get('node')->id();
 
-                        $response->headers->set('Content-Type', 'text/html');
+        // Check if the json file containing the list of blocked nodes was
+        // created.
+        $root_dir = dirname(__DIR__);
+        $filename = 'blocked_ids.json';
+        $file_path = "$root_dir" . '/Form' . "/$filename";
+        $is_file_exists = file_exists($file_path);
+        if (!$is_file_exists) {
+            return;
+        }
 
-                        // Web Linking: https://tools.ietf.org/html/rfc5988
-                        $response->headers->set('Link', '<' . $key['authority'] . '>' . 'rel="blocked-by"');
-
-                        $response->prepare($request);
-
-                        $event->setResponse($response);
-                        
-                        return $response;
-                    } 
-                }
+        $file = file_get_contents("$root_dir" . '/Form' . "/$filename");
+        $blocked_nodes = json_decode($file, TRUE);
+        foreach($blocked_nodes as $key) {
+            if($key["page_id"] == $current_node_id) {
+                Http451Controller::generateHttp451Response($request, $node);
             }
-        } 
+        }
     }
 }
