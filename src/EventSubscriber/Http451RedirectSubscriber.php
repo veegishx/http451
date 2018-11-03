@@ -9,6 +9,7 @@ namespace Drupal\http451\EventSubscriber;
 use Drupal\Core\Url;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -52,11 +53,14 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
 
                         $response->headers->set('Content-Type', 'text/html');
 
+                        // Web Linking: https://tools.ietf.org/html/rfc5988
                         $response->headers->set('Link', '<' . $key['authority'] . '>' . 'rel="blocked-by"');
 
                         $response->prepare($request);
 
-                        $response->send();
+                        $event->setResponse($response);
+                        
+                        return $response;
                     } 
                 }
             }
