@@ -51,9 +51,9 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
 
         $file = file_get_contents($file_path);
         $blocked_nodes = json_decode($file, TRUE);
-        foreach($blocked_nodes as $key) {
-            if($key["page_id"] == $current_node_id) {
-                Http451Controller::generateHttp451Response($request, $node);
+        foreach($blocked_nodes as $node) {
+            if($node["page_id"] == $current_node_id) {
+                Http451Controller::generateHttp451Response($event, $node);
             }
         }
     }
