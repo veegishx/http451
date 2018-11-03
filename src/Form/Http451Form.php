@@ -89,15 +89,24 @@ class Http451Form extends ConfigFormBase {
             if(file_exists("$root_dir/$filename")) {
                 $current_data = file_get_contents("$root_dir/$filename");
                 $data_array = json_decode($current_data, true);
+                $flag = FALSE;
                 foreach($data_array as $node => $attribute) {
                     if($attribute["nid"] == "$id") {
+                        $flag = TRUE;
                         $data_array[$node]['authority'] = $authority;
                         $data_array[$node]['title'] = $title;
                         $data_array[$node]['content'] = $content;
                     }
                 }
 
-                file_put_contents("$root_dir/$filename", json_encode($data_array, JSON_PRETTY_PRINT));
+                if(!$flag) {
+                    $data_array[] = array(
+                        "nid" => $id,
+                        "authority" => $authority,
+                        "title" => $title,
+                        "content" => $content,
+                    );
+                }
                 
                 if(file_put_contents("$root_dir/$filename", json_encode($data_array, JSON_PRETTY_PRINT))) {
                     drupal_set_message(t('SUCCESS: Message for blocked resource updated!'), 'status');
