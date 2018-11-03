@@ -9,23 +9,25 @@ namespace Drupal\http451\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 
 class Http451Controller extends ControllerBase {
     /**
      * Http451.
      *
+     * @param GetResponseEvent $event
      * @param Array  $blocked_node
-     * @param String  $node_title
      * @return void
      *
      */
-    public function generateHttp451Response($request, $blocked_node) {
+    public function generateHttp451Response(GetResponseEvent $event, $blocked_node) {
+
+      $request = $event->getRequest();
 
       $response = new Response();
-      $node_title = (string) $request->attributes->get('node')->getTitle();
       $response->setContent(
-          $blocked_node["page_content"] . '<h4>Resource title: ' . $node_title . '</h4>
+          $blocked_node["page_content"] . '<h4>Resource title: ' . $blocked_node['page_title']. '</h4>
           <p>This resource has been blocked as requested by: <a href="'. $blocked_node["blocking_authority"] . '">' . $blocked_node["blocking_authority"] . '</a></p>'
       );
 
@@ -36,9 +38,7 @@ class Http451Controller extends ControllerBase {
       $response->headers->set('Link', '<' . $blocked_node['blocked_by'] . '>' . 'rel="blocked-by"');
 
       $response->prepare($request);
-      $response->setResponse($response);
-
-      return $response;
+      $event->setResponse($response);
     }
 
 }

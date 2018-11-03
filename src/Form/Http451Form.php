@@ -95,7 +95,6 @@ class Http451Form extends ConfigFormBase {
         //  specify to run the above command in the README.
         if(!is_writable("$root_dir")) {
             drupal_set_message($this->t('Error: Please make sure that the module directory is writable. PATH:' . "$root_dir/$filename"), 'error');
-            return parent::submitForm($form, $form_state);
         }
 
         $is_page_already_blocked = FALSE;
