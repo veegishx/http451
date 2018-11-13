@@ -34,9 +34,9 @@ class Http451Form extends ConfigFormBase {
         // Default parameters
         $config = \Drupal::config('http451.settings');
 
-        // Page title and source text.
+        // Page title and content.
         $default_title = $config->get('http451.page_title');
-        $default_content = $config->get('http451.source_text');
+        $default_content = $config->get('http451.page_content');
         
         $form['page_id'] = [
             '#type' => 'textfield',
@@ -69,7 +69,7 @@ class Http451Form extends ConfigFormBase {
         $form['page_content'] = [
             '#type' => 'textarea',
             '#title' => $this->t('Reason for censorship: '),
-            '#default_value' => $config->get('http451.page_title'),
+            '#default_value' => $default_content,
             '#description' => $this->t('If you wish to use a custom message to show up on this page, you can set it here.'),
         ];
 
