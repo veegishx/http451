@@ -2,6 +2,8 @@
 
 This is a basic implementation of [RFC 7725](https://tools.ietf.org/html/rfc7725) as a Drupal Module. 
 
+![configuration_screenshot](demo.gif "demo")
+
 ## Installation
 * Upload plugin directory to /modules/custom/ directory of your Drupal installation.
 
