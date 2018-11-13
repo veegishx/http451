@@ -87,6 +87,9 @@ class Http451Form extends ConfigFormBase {
     }
 
     public function submitForm(array &$form, FormStateInterface $form_state) {
+        // The Messenger service.
+        $messenger = \Drupal::messenger();
+
         $root_dir = realpath(dirname(__FILE__));
         $filename = 'blocked_ids.json';
         $values = $form_state->getValues();
@@ -97,7 +100,7 @@ class Http451Form extends ConfigFormBase {
         // TODO Either find a way to change permissions programatically, or
         //  specify to run the above command in the README.
         if(!is_writable("$root_dir")) {
-            drupal_set_message($this->t('Error: Please make sure that the module directory is writable. PATH:' . "$root_dir/$filename"), 'error');
+            $messenger->addError($this->t('Error: Please make sure that the module directory is writable. PATH:' . "$root_dir/$filename"));
         }
 
         $is_page_already_blocked = FALSE;
@@ -122,10 +125,10 @@ class Http451Form extends ConfigFormBase {
         $data_array = json_encode($data_array, JSON_PRETTY_PRINT);
         $is_file_write_successful = (bool) file_put_contents("$root_dir/$filename", $data_array);
         if($is_file_write_successful) {
-            drupal_set_message($this->t('SUCCESS: Message for blocked resource updated!'), 'status');
+            $messenger->addStatus($this->t('SUCCESS: Message for blocked resource updated!'));
             return TRUE;
         } else {
-            drupal_set_message($this->t('ERROR: Could not update the page for this blocked resource'), 'error');
+            $messenger->addError($this->t('ERROR: Could not update the page for this blocked resource'));
         }
     }
 }

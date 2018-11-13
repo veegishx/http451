@@ -1,4 +1,4 @@
-# HTTP541 Drupal Module
+# RFC7725 HTTP541 Drupal Module
 
 This is a basic implementation of [RFC 7725](https://tools.ietf.org/html/rfc7725) as a Drupal Module. 
 
@@ -16,3 +16,5 @@ This is a basic implementation of [RFC 7725](https://tools.ietf.org/html/rfc7725
 ![configuration_screenshot](configuration_screenshot.png "Configuration Page")
 ![result_screenshot](result_screenshot.png "Result Page")
 
+## Maintainers
+This repository is maintained by [VEEGISHx](https://github.com/VEEGISHx) & [MaskyS](https://github.com/MaskyS)
