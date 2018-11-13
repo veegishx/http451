@@ -7,13 +7,13 @@ http451.settings:
       mapping:
         page_title:
           type: text
-          label: 'Default title for HTTP451 status page:'
-        page_content:
-          type: text
-          label: 'Default message for HTTP451 error page:'
+          label: 'Default title for HTTP451 status page'
         page_status:
           type: text
           label: 'Server HTTP 451 Response code'
+        page_content:
+          type: text
+          label: 'Default message for HTTP451 error page'
 block.settings.http451:
   type: block_settings
   label: 'HTTP451 block'
