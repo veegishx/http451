@@ -1,0 +1,35 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.page.body
+    - field.field.node.page.field_censorship
+    - node.type.page
+  module:
+    - http451
+    - text
+    - user
+id: node.page.default
+targetEntityType: node
+bundle: page
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 100
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_censorship:
+    weight: 102
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: http451_formatter
+    region: content
+  links:
+    weight: 101
+    region: content
+hidden:
+  content_moderation_control: true
