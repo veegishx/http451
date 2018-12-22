@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_censorship
+    - node.type.article
+  module:
+    - http451
+id: node.article.field_censorship
+field_name: field_censorship
+entity_type: node
+bundle: article
+label: Censorship
+description: 'This will enable you to enforce censorship by blocking the contents of a page and display a HTTP 451 status message instead.'
+required: false
+translatable: false
+default_value:
+  -
+    status: 0
+    blocking_authority: ''
+    page_title: 'Error 451: Unavailable For Legal Reasons'
+    page_content: '<html><head><title>Unavailable For Legal Reasons</title></head><body><h1>Unavailable For Legal Reasons</h1><p>This request may not be serviced in the Roman Province of Judea due to the Lex Julia Majestatis, which disallows access to resources hosted on servers deemed to be operated by the People''s Front of Judea.</p></body></html>'
+default_value_callback: ''
+settings: {  }
+field_type: http451_fieldtype
