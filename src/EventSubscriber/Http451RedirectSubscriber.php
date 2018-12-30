@@ -29,6 +29,10 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
      * @return void
      */
     public function redirectMyContentTypeNode(GetResponseEvent $event) {
+        // Load the default configurations
+        $config = \Drupal::config('http451.settings');
+        $http451_custom_field = $config->get('http451.custom_field_name');
+
         $request = $event->getRequest();
 
         // Prevent pages like "edit", "revisions", etc from being redirected.
@@ -39,23 +43,26 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
 
         $current_node_id = (string) $request->attributes->get('node')->id();
 
-        // Check if the json file containing the list of blocked nodes was
-        // created.
-        $root_dir = dirname(__DIR__);
-        $filename = 'blocked_ids.json';
-        $file_path = "$root_dir" . '/Form' . "/$filename";
-        $is_file_exists = file_exists($file_path);
-        if (!$is_file_exists) {
-            return;
-        }
 
-        $file = file_get_contents($file_path);
-        $blocked_nodes = json_decode($file, TRUE);
-        foreach($blocked_nodes as $node) {
-            if($node["page_id"] == $current_node_id) {
-                $controller = new Http451Controller();
-                $controller->generateHttp451Response($event, $node);
-            }
+        $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+        $node = $node_storage->load($current_node_id);
+        $node_status = $node->get($http451_custom_field)->status;
+        
+        if($node_status == 1) {
+            $response = new Response();
+            $response->setContent(
+                '<p>' . $node->get($http451_custom_field)->page_content . '</p>
+                <p>Blocking entity: <a href="'. $node->get($http451_custom_field)->blocking_authority . '">' . $node->get($http451_custom_field)->blocking_authority . '</a></p>'
+            );
+
+            $response->setStatusCode(Response::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS, 'Unavailable For Legal Reasons');
+
+            $response->headers->set('Content-Type', 'text/html');
+            // Web Linking: https://tools.ietf.org/html/rfc5988
+            $response->headers->set('Link', '<' . $node->get($http451_custom_field)->blocking_authority . '>' . 'rel="blocked-by"');
+
+            $response->prepare($request);
+            $event->setResponse($response);
         }
     }
 }

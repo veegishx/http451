@@ -5,6 +5,9 @@ http451.settings:
     http451:
       type: mapping
       mapping:
+        custom_field_name:
+          type: text
+          label: 'Machine name for HTTP451 custom field'
         page_title:
           type: text
           label: 'Default title for HTTP451 status page'

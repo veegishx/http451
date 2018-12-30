@@ -20,64 +20,84 @@ use Drupal\Core\TypedData\DataDefinition;
  * )
  */
 class Http451FieldType extends FieldItemBase {
-    public static function schema(FieldStorageDefinitionInterface $field_definition) {
-        return array(
-          'columns' => array(
-            'status' => array(
-                'type' => 'text',
-                'not null' => FALSE,
-              ),
+  
+  /**
+   * {@inheritdoc}
+   */
+  public static function defaultFieldSettings() {
+    return [
+      'status' => FALSE,
+    ] + parent::defaultFieldSettings();
+  }
 
-            'blocking_authority' => array(
-                'type' => 'text',
-                'not null' => FALSE,
-              ),
+  /**
+   * {@inheritdoc}
+   */
 
-              'page_title' => array(
-                'type' => 'text',
-                'not null' => FALSE,
-              ),
+  public static function schema(FieldStorageDefinitionInterface $field_definition) {
+      return array(
+        'columns' => array(
+          'status' => array(
+              'type' => 'text',
+              'not null' => FALSE,
+            ),
 
-              'page_content' => array(
-                'type' => 'text',
-                'not null' => FALSE,
-              ),
-          ),
-        );
+          'blocking_authority' => array(
+              'type' => 'text',
+              'not null' => FALSE,
+            ),
+
+            'page_title' => array(
+              'type' => 'text',
+              'not null' => FALSE,
+            ),
+
+            'page_content' => array(
+              'type' => 'text',
+              'not null' => FALSE,
+            ),
+        ),
+      );
+  }
+  
+  /**
+   * {@inheritdoc}
+   */
+  public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition) {
+      $properties = [];
+
+      $properties['status'] = DataDefinition::create('string')
+      ->setLabel(t('Node censorship status'))
+      ->setRequired(FALSE);
+
+      $properties['blocking_authority'] = DataDefinition::create('string')
+      ->setLabel(t('URL of Authority'))
+      ->setRequired(FALSE);
+
+      $properties['page_title'] = DataDefinition::create('string')
+      ->setLabel(t('New Title'))
+      ->setRequired(FALSE);
+
+      $properties['page_content'] = DataDefinition::create('string')
+      ->setLabel(t('Message'))
+      ->setRequired(FALSE);
+
+      return $properties;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isEmpty() {
+      $status = $this->get('status')->getValue();
+      $enabled = FALSE;
+
+      if(isset($status)) {
+          $enabled = TRUE;
       }
 
-      public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition) {
-          $properties = [];
-
-          $properties['status'] = DataDefinition::create('string')
-          ->setLabel(t('Node censorship status'))
-          ->setRequired(FALSE);
-
-          $properties['blocking_authority'] = DataDefinition::create('string')
-          ->setLabel(t('URL of Authority'))
-          ->setRequired(FALSE);
-
-          $properties['page_title'] = DataDefinition::create('string')
-          ->setLabel(t('New Title'))
-          ->setRequired(FALSE);
-
-          $properties['page_content'] = DataDefinition::create('string')
-          ->setLabel(t('Message'))
-          ->setRequired(FALSE);
-
-          return $properties;
-      }
-
-      public function isEmpty() {
-          $status = $this->get('status')->getValue();
-          $enabled = FALSE;
-
-          if(isset($status)) {
-              $enabled = TRUE;
-          }
-
-          return $enable;
-      }
+      return $enable;
+  }
 }
 
 ?>

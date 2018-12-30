@@ -2,6 +2,7 @@
 
 namespace Drupal\http451\Plugin\Field\FieldFormatter;
 
+use Drupal\color_field\Plugin\Field\FieldType\Http451FieldType;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FieldItemInterface;
@@ -26,7 +27,7 @@ class Http451FieldFormatter extends FormatterBase {
      */
     public function settingsSummary() {
       $summary = [];
-      $summary[] = $this->t('Settings for Http 451 Widget');
+      $summary[] = $this->t('Formatter for HTTP451 Widget');
       return $summary;
     }
   
@@ -34,16 +35,18 @@ class Http451FieldFormatter extends FormatterBase {
      * {@inheritdoc}
      */
     public function viewElements(FieldItemListInterface $items, $langcode) {
-      $element = [];
+      $elements = [];
   
       foreach ($items as $delta => $item) {
         // Render each element as markup.
-        $element[$delta] = ['#markup' => $item->value];
+        $elements[$delta] = [
+          '#type' => 'markup',
+          '#markup' => '<h1>' . $item->page_title . '</h1>',
+        ];
       }
-  
-      return $element;
+
+      return $elements;
     }
-  
-  }
+}
 
 ?>
