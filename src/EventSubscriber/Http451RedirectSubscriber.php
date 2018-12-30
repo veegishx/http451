@@ -52,7 +52,7 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
             $response = new Response();
             $response->setContent(
                 '<p>' . $node->get($http451_custom_field)->page_content . '</p>
-                <p>Blocking entity: <a href="'. $node->get($http451_custom_field)->blocking_authority . '">' . $node->get($http451_custom_field)->blocking_authority . '</a></p>'
+                <p>Enforced by: <a href="'. $node->get($http451_custom_field)->blocking_authority . '">' . $node->get($http451_custom_field)->blocking_authority . '</a></p>'
             );
 
             $response->setStatusCode(Response::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS, 'Unavailable For Legal Reasons');
