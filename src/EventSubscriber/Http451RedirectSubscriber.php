@@ -94,6 +94,7 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
         // Check the status property of $http451_custom_field if it is assigned to the node
         $node_status = '';
         $found = FALSE;
+        $worldwide = FALSE;
 
         if ($contains_field) {
             $node_status = $node->get($http451_custom_field)->status;
@@ -107,16 +108,17 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
             // Remove whitespaces and convert to uppercase
             $countries == NULL ? $list = '' : $list = array_map('strtoupper', preg_replace('/\s+/', '', (explode(",", $countries))));
             $client_country = strtoupper(preg_replace('/\s+/', '', Http451RedirectSubscriber::getIpAddressOriginCountry($ip)));
-            
             // If client country is found in list then set flag to TRUE
-            foreach($list as $list_item) {
-                if($list_item == $client_country) {
-                    $found = TRUE;
+            if($list != NULL) {
+                foreach($list as $list_item) {
+                    if($list_item == $client_country) {
+                        $found = TRUE;
+                    }
                 }
             }
 
             // If flag = TRUE initialize a new response and set headers for HTTP451 status code
-            if($found) {
+            if($found || $list == NULL) {
                 $response = new Response();
                 $response->setContent(
                     '<p>' . $node->get($http451_custom_field)->page_content . '</p>
