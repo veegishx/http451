@@ -38,24 +38,29 @@ class Http451FieldType extends FieldItemBase {
       return array(
         'columns' => array(
           'status' => array(
-              'type' => 'text',
-              'not null' => FALSE,
-            ),
+            'type' => 'text',
+            'not null' => FALSE,
+          ),
+
+          'countries_affected' => array(
+            'type' => 'text',
+            'not null' => FALSE,
+          ),
 
           'blocking_authority' => array(
-              'type' => 'text',
-              'not null' => FALSE,
-            ),
+            'type' => 'text',
+            'not null' => FALSE,
+          ),
 
-            'page_title' => array(
-              'type' => 'text',
-              'not null' => FALSE,
-            ),
+          'page_title' => array(
+            'type' => 'text',
+            'not null' => FALSE,
+          ),
 
-            'page_content' => array(
-              'type' => 'text',
-              'not null' => FALSE,
-            ),
+          'page_content' => array(
+            'type' => 'text',
+            'not null' => FALSE,
+          ),
         ),
       );
   }
@@ -68,6 +73,10 @@ class Http451FieldType extends FieldItemBase {
 
       $properties['status'] = DataDefinition::create('string')
       ->setLabel(t('Node censorship status'))
+      ->setRequired(FALSE);
+
+      $properties['countries_affected'] = DataDefinition::create('string')
+      ->setLabel(t('List of countries affected by this censorship'))
       ->setRequired(FALSE);
 
       $properties['blocking_authority'] = DataDefinition::create('string')
@@ -96,7 +105,7 @@ class Http451FieldType extends FieldItemBase {
           $enabled = TRUE;
       }
 
-      return $enable;
+      return !$enabled;
   }
 }
 

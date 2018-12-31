@@ -5,6 +5,9 @@ http451.settings:
     http451:
       type: mapping
       mapping:
+        geoip_api_key:
+          type: text
+          label: 'API Key for GeoIP-based censorship'
         custom_field_name:
           type: text
           label: 'Machine name for HTTP451 custom field'

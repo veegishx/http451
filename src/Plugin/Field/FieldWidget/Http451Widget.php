@@ -43,6 +43,13 @@ class Http451Widget extends WidgetBase implements WidgetInterface {
         '#description' => $this->t('Click to enable or disable censorship of this node'),
     );
 
+    $element['countries_affected'] = array(
+        '#type' => 'textfield',
+        '#title' => $this->t('Countries affected: '),
+        '#default_value' => isset($items[$delta]->countries_affected) ? $items[$delta]->countries_affected : NULL,
+        '#description' => $this->t('Leave blank to apply censorship to users from every country. Otherwise enter the country names separated by a comma.'),
+    );
+
     $element['page_title'] = array(
         '#type' => 'textfield',
         '#title' => $this->t('Censored page title: '),

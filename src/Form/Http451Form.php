@@ -17,15 +17,9 @@ class Http451Form extends ConfigFormBase {
     public function buildForm(array $form, FormStateInterface $form_state) {
         /**
          *
-         * List of fields
          * -----------------------------------
-         *
-         * Authority Implementing the censorship
-         * Authority Requesting the censorship
-         * Custom page title
-         * Custom page message
+         * Configuration Form for ipstack API 
          * -----------------------------------
-         *
          *
         */
         // Invoking Form constructor
@@ -34,48 +28,20 @@ class Http451Form extends ConfigFormBase {
         // Default parameters
         $config = \Drupal::config('http451.settings');
 
-        // Page title and content.
-        $default_title = $config->get('http451.page_title');
-        $default_content = $config->get('http451.page_content');
+        // Get api key if already set
+        $api_key = $config->get('geoip_api_key');
         
-        $form['page_id'] = [
+        $form['geoip_api_key'] = [
             '#type' => 'textfield',
-            '#title' => $this->t('Blocked Post ID: '),
-            '#description' => $this->t('Enter the ID of the resource you wish to block'),
+            '#title' => $this->t('API Key'),
+            '#default_value' => $api_key,
+            '#description' => $this->t('Enter your API Key for ipstack'),
             '#required' => TRUE,
         ];
 
-        $form['blocked_by'] = [
-            '#type' => 'url',
-            '#title' => $this->t('URL of Authority Implementing Takedown '),
-            '#description' => $this->t('You need to specify the URL of the entity who implemented the takedown.'),
-            '#required' => TRUE,
-        ];
-
-        $form['blocking_authority'] = [
-            '#type' => 'url',
-            '#title' => $this->t('URL of Authority: '),
-            '#description' => $this->t('You need to specify the URL of the authority who requested the takedown.'),
-            '#required' => TRUE,
-        ];
-
-        $form['page_title'] = [
-            '#type' => 'textfield',
-            '#title' => $this->t('Censored page title: '),
-            '#default_value' => $default_title,
-            '#description' => $this->t('If you wish to use a custom non-standard title to show up on this page, you can set it here.'),
-        ];
-
-        $form['page_content'] = [
-            '#type' => 'textarea',
-            '#title' => $this->t('Reason for censorship: '),
-            '#default_value' => $default_content,
-            '#description' => $this->t('If you wish to use a custom message to show up on this page, you can set it here.'),
-        ];
-
-        $form['save'] = [
-            '#type' => 'submit',
-            '#value' => $this->t('Block Item')
+        $form['link'] = [
+            '#type' => 'markup',
+            '#markup' => '<strong>You can register a new API Key by clicking <a href="https://ipstack.com/product">here</a>.</strong>',
         ];
 
         return $form;
@@ -88,47 +54,12 @@ class Http451Form extends ConfigFormBase {
 
     public function submitForm(array &$form, FormStateInterface $form_state) {
         // The Messenger service.
-        $messenger = \Drupal::messenger();
-
-        $root_dir = realpath(dirname(__FILE__));
-        $filename = 'blocked_ids.json';
         $values = $form_state->getValues();
 
-        // Make sure the directory is writable
-        // sudo chown -R www-data:www-data Form
-        // Append data to blocked_ids.json
-        // TODO Either find a way to change permissions programatically, or
-        //  specify to run the above command in the README.
-        if(!is_writable("$root_dir")) {
-            $messenger->addError($this->t('Error: Please make sure that the module directory is writable. PATH:' . "$root_dir/$filename"));
-        }
-
-        $is_page_already_blocked = FALSE;
-        // Check if file exists
-        if(file_exists("$root_dir/$filename")) {
-            $current_data = file_get_contents("$root_dir/$filename");
-            $data_array = json_decode($current_data, TRUE);
-
-            // Check if this page was already blocked before; if so update details.
-            foreach($data_array as $node => $attribute) {
-                if($attribute['page_id'] == $values['page_id']) {
-                    $is_page_already_blocked = TRUE;
-                    $data_array[$node] = $values;
-                }
-            }
-        }
-
-        if (!$is_page_already_blocked) {
-            $data_array[] = $values;
-        }
-
-        $data_array = json_encode($data_array, JSON_PRETTY_PRINT);
-        $is_file_write_successful = (bool) file_put_contents("$root_dir/$filename", $data_array);
-        if($is_file_write_successful) {
-            $messenger->addStatus($this->t('SUCCESS: Message for blocked resource updated!'));
-            return TRUE;
-        } else {
-            $messenger->addError($this->t('ERROR: Could not update the page for this blocked resource'));
-        }
+        $messenger = \Drupal::messenger();
+    
+        \Drupal::configFactory()->getEditable('http451.settings')->set('geoip_api_key', $values['geoip_api_key'])->save();
+    
+        $messenger->addStatus($this->t('Your API Key ' . $values['geoip_api_key'] . ' has been set.'));
     }
 }

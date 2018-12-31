@@ -1,4 +1,5 @@
 http451:
+  geoip_api_key: ''
   custom_field_name: ''
   page_title: '451 Unavailable For Legal Reasons'
   page_status: '451'
