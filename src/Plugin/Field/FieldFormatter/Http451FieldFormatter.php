@@ -36,14 +36,6 @@ class Http451FieldFormatter extends FormatterBase {
      */
     public function viewElements(FieldItemListInterface $items, $langcode) {
       $elements = [];
-  
-      foreach ($items as $delta => $item) {
-        // Render each element as markup.
-        $elements[$delta] = [
-          '#type' => 'markup',
-          '#markup' => '<h1>' . $item->page_title . '</h1>',
-        ];
-      }
 
       return $elements;
     }
