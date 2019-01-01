@@ -106,15 +106,19 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
 
             // Split comma delimited string of countries into $list array
             // Remove whitespaces and convert to uppercase
-            $countries == NULL ? $list = '' : $list = array_map('strtoupper', preg_replace('/\s+/', '', (explode(",", $countries))));
+            $countries == NULL ? $list = NULL : $list = array_map('strtoupper', preg_replace('/\s+/', '', (explode(",", $countries))));
             $client_country = strtoupper(preg_replace('/\s+/', '', Http451RedirectSubscriber::getIpAddressOriginCountry($ip)));
             // If client country is found in list then set flag to TRUE
             if($list != NULL) {
                 foreach($list as $list_item) {
                     if($list_item == $client_country) {
                         $found = TRUE;
+                        print_r('LISTITEM: ' . $list_item . '<br/>');
+                        print_r('CC: ' . $list_item . '<br/>');
                     }
+                    print_r('LIST: ' . $list_item . '<br/>');
                 }
+                print_r('STATUS: ' . $found);
             }
 
             // If flag = TRUE initialize a new response and set headers for HTTP451 status code
