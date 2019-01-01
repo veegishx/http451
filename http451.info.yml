@@ -4,4 +4,4 @@ package: Http451
 type: module
 core: 8.x
 
-configure: http451.form
+configure: http451.settings
