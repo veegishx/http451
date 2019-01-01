@@ -113,12 +113,8 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
                 foreach($list as $list_item) {
                     if($list_item == $client_country) {
                         $found = TRUE;
-                        print_r('LISTITEM: ' . $list_item . '<br/>');
-                        print_r('CC: ' . $list_item . '<br/>');
                     }
-                    print_r('LIST: ' . $list_item . '<br/>');
                 }
-                print_r('STATUS: ' . $found);
             }
 
             // If flag = TRUE initialize a new response and set headers for HTTP451 status code
