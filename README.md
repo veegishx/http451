@@ -7,7 +7,7 @@ This is a basic implementation of [RFC 7725](https://tools.ietf.org/html/rfc7725
 ## Installation
 * Download the module. [[Click here for latest version]](https://github.com/VEEGISHx/http451/archive/master.zip)
 
-* Extract the contents to your **`drupal/modules`** folder and activate it via your drupal admin dashboard.
+* Install it as you normally would by going to **`Extend > Install new module > upload`** or by extracting the contents of the zip file to your **`drupal/modules`** folder and activating it via your drupal admin dashboard.
 
 * After activating the module you will need to provide an API Key for location-based censorship. You can get one [here](https://ipstack.com/product).
 
