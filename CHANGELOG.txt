@@ -1,0 +1,51 @@
+92f0ce6 - Replaced ['REMOTE_ADDR'] with ip_address() and fixed linting errors
+1874655 - Fix config path preventing module from being installed
+0cd8b6a - Removed debug functions
+90450fc - Fixed bug preventing client country of origin from being properly compared with list of censored countries
+0074232 - Prevent FieldFormatter from displaying data on non-censored nodes
+624a79f - Fixed logic for returning a 451 code to all visitors if countries affected field is left blank
+868b7ee - Updated readme with new screenshots
+7730aeb - updated readme with new instructions
+c249bb5 - Added location-based censorship
+5798fce - Fixed demo gif colours
+7b12a54 - Replaced wrong demo gif with the right one
+a4ec773 - Merge branch 'dev'
+f748754 - Updated readme to include new screenshots
+bdafdc6 - Updated readme to include new installation instructions
+d1a9d31 - Replaced configuration form with custom fields
+f95e094 - Merge pull request #6 from VEEGISHx/revert-5-dev
+c67d1e7 - Revert "Added custom field type support"
+e8c3252 - Merge pull request #5 from VEEGISHx/dev
+66b9c63 - Added custom field type support
+fe4903a - Updated readme.md
+e72b635 - Updated config variables
+42ea919 - Merge branch 'master' of https://github.com/VEEGISHx/http451
+2d62d95 - Refactored config files
+e5d6784 - Merge pull request #4 from MaskyS/master
+b85ab62 - Merge branch 'master' of http://github.com/MaskyS/http451
+dcb0d4d - Merge pull request #1 from VEEGISHx/master
+9ef49d9 - Replace drupal_set_message() with Messenger service
+6a5454a - Updated readme.md
+06dedd3 - Merge pull request #3 from VEEGISHx/dev
+bb92f9c - Update .travis.yml
+38f2465 - Update .travis.yml
+6ca09a9 - Added travis-ci
+1189184 - Merge pull request #2 from MaskyS/master
+f26b6e1 - Stop calling Http451Controller::generateHttp451Response() statically
+2047424 - Merge branch 'MaskyS-master'
+b595d43 - Fix bugs
+7d0c9c2 - import controller
+0420139 - Extract generating http451 response functionality  into controller.
+125ef17 - Refactor, rename 'nid' to 'page_id' and add blocked-by field
+698483e - Fix Unescaped  quote.
+dd39a4f - Added ability to update blocked node attributes
+07fc477 - Refactored module
+94aa49c - Fixed headers being sent again rather than being modified
+ef28588 - Added a .gitignore file
+1421eb6 - Updated configuration form to display proper placeholder data
+1ae2e06 - Updated screenshots
+bca9514 - Updated response page
+4464ffe - Updated json file append code block
+24ac8b9 - Merge branch 'master' of https://github.com/VEEGISHx/http451 Merged License File
+1a4a53b - Initial commit
+39a4ce0 - Initial commit
