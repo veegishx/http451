@@ -3,12 +3,11 @@
 namespace Drupal\http451\Plugin\Field\FieldType;
 
 use Drupal\Core\Field\FieldItemBase;
-use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\TypedData\DataDefinition;
 
 /**
- * Implements a field type for HTTP451
+ * Implements a field type for HTTP451.
  *
  * @FieldType(
  *   id = "http451_fieldtype",
@@ -20,7 +19,7 @@ use Drupal\Core\TypedData\DataDefinition;
  * )
  */
 class Http451FieldType extends FieldItemBase {
-  
+
   /**
    * {@inheritdoc}
    */
@@ -33,80 +32,78 @@ class Http451FieldType extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-
   public static function schema(FieldStorageDefinitionInterface $field_definition) {
-      return array(
-        'columns' => array(
-          'status' => array(
-            'type' => 'text',
-            'not null' => FALSE,
-          ),
+    return [
+      'columns' => [
+        'status' => [
+          'type' => 'text',
+          'not null' => FALSE,
+        ],
 
-          'countries_affected' => array(
-            'type' => 'text',
-            'not null' => FALSE,
-          ),
+        'countries_affected' => [
+          'type' => 'text',
+          'not null' => FALSE,
+        ],
 
-          'blocking_authority' => array(
-            'type' => 'text',
-            'not null' => FALSE,
-          ),
+        'blocking_authority' => [
+          'type' => 'text',
+          'not null' => FALSE,
+        ],
 
-          'page_title' => array(
-            'type' => 'text',
-            'not null' => FALSE,
-          ),
+        'page_title' => [
+          'type' => 'text',
+          'not null' => FALSE,
+        ],
 
-          'page_content' => array(
-            'type' => 'text',
-            'not null' => FALSE,
-          ),
-        ),
-      );
+        'page_content' => [
+          'type' => 'text',
+          'not null' => FALSE,
+        ],
+      ],
+    ];
   }
-  
+
   /**
    * {@inheritdoc}
    */
   public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition) {
-      $properties = [];
+    $properties = [];
 
-      $properties['status'] = DataDefinition::create('string')
+    $properties['status'] = DataDefinition::create('string')
       ->setLabel(t('Node censorship status'))
       ->setRequired(FALSE);
 
-      $properties['countries_affected'] = DataDefinition::create('string')
+    $properties['countries_affected'] = DataDefinition::create('string')
       ->setLabel(t('List of countries affected by this censorship'))
       ->setRequired(FALSE);
 
-      $properties['blocking_authority'] = DataDefinition::create('string')
+    $properties['blocking_authority'] = DataDefinition::create('string')
       ->setLabel(t('URL of Authority'))
       ->setRequired(FALSE);
 
-      $properties['page_title'] = DataDefinition::create('string')
+    $properties['page_title'] = DataDefinition::create('string')
       ->setLabel(t('New Title'))
       ->setRequired(FALSE);
 
-      $properties['page_content'] = DataDefinition::create('string')
+    $properties['page_content'] = DataDefinition::create('string')
       ->setLabel(t('Message'))
       ->setRequired(FALSE);
 
-      return $properties;
+    return $properties;
   }
 
   /**
    * {@inheritdoc}
    */
   public function isEmpty() {
-      $status = $this->get('status')->getValue();
-      $enabled = FALSE;
+    $status = $this->get('status')->getValue();
+    $enabled = FALSE;
 
-      if(isset($status)) {
-          $enabled = TRUE;
-      }
+    if (isset($status)) {
+      $enabled = TRUE;
+    }
 
-      return !$enabled;
+    return !$enabled;
   }
-}
 
-?>
+}
