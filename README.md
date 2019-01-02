@@ -11,7 +11,7 @@ This is a basic implementation of [RFC 7725](https://tools.ietf.org/html/rfc7725
 
 * After activating the module you will need to provide an API Key for location-based censorship. You can get one [here](https://ipstack.com/product).
 
-* Add you API to the module configuration by navigating to **`Configuration > http451 Settings`** and paste your key in the form provided.
+* Add your API key to the module configuration by navigating to **`Configuration > http451 Settings`** and paste your key in the form provided.
 
 * Once the API Key set click on **`Structure > Content types`** and click on **`Manage Fields`** for the content type on which you want the module to be used.
 
