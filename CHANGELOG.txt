@@ -1,3 +1,5 @@
+610bd6b - Updated readme with consise instructions
+0e9a0d3 - Added a changelog file
 92f0ce6 - Replaced ['REMOTE_ADDR'] with ip_address() and fixed linting errors
 1874655 - Fix config path preventing module from being installed
 0cd8b6a - Removed debug functions
