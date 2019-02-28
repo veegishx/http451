@@ -68,9 +68,9 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
     $api_response = json_decode($json_response, TRUE);
 
     // Save country name.
-    $country_name = $api_response['country_name'];
+    $country_code = $api_response['country_code'];
 
-    return $country_name;
+    return $country_code;
   }
 
   /**

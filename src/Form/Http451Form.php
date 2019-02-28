@@ -73,7 +73,7 @@ class Http451Form extends ConfigFormBase {
 
     \Drupal::configFactory()->getEditable('http451.settings')->set('geoip_api_key', $values['geoip_api_key'])->save();
 
-    $messenger->addStatus($this->t('Your API Key %key has been set.', $values['geoip_api_key']));
+    $messenger->addStatus($this->t('Your API Key key has been set.'));
   }
 
 }

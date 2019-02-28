@@ -45,7 +45,7 @@ class Http451Widget extends WidgetBase implements WidgetInterface {
 
     $element['countries_affected'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Countries affected: '),
+      '#title' => $this->t('Country code: '),
       '#default_value' => isset($items[$delta]->countries_affected) ? $items[$delta]->countries_affected : NULL,
       '#description' => $this->t('Leave blank to apply censorship to users from every country. Otherwise enter the country names separated by a comma.'),
     ];
