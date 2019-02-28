@@ -1,6 +1,6 @@
 # RFC7725 HTTP541 Drupal Module
 
-This is a basic implementation of [RFC 7725](https://tools.ietf.org/html/rfc7725) as a Drupal Module. 
+The HTTP451 module provides an implementation of [RFC 7725](https://tools.ietf.org/html/rfc7725) in Drupal. When enabled, it can be configured to modify the http response code of any resource served by Drupal and have a http 451 response code served instead of the original one. 
 
 ![demo_gif](screenshots/resultdemo.gif "demo")
 
