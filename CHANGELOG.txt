@@ -1,4 +1,9 @@
-610bd6b - Updated readme with consise instructions
+845a350 - Replaced country_name by country_code
+cac9ce4 - Ditched ip_address() in favour of Drupal::request()->getClientIp()
+2ab7d14 - Updated LICENSE
+177ebea - Fixed typo in readme.md
+9b76e91 - Updated changelog with new changes
+610bd6b - Updated readme with concise instructions
 0e9a0d3 - Added a changelog file
 92f0ce6 - Replaced ['REMOTE_ADDR'] with ip_address() and fixed linting errors
 1874655 - Fix config path preventing module from being installed
