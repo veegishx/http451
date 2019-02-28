@@ -38,7 +38,7 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
       $client_ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
     }
     else {
-      $client_ip = ip_address();
+      $client_ip = \Drupal::request()->getClientIp();
     }
 
     return $client_ip;
