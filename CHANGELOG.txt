@@ -1,3 +1,6 @@
+60d863f - Fixed typo in README.md
+c0827d3 - Updated module description in README.md
+8a982ea - Updated CHANGELOG.txt
 845a350 - Replaced country_name by country_code
 cac9ce4 - Ditched ip_address() in favour of Drupal::request()->getClientIp()
 2ab7d14 - Updated LICENSE
