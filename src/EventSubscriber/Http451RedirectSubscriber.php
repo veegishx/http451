@@ -6,6 +6,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpFoundation\Response;
+use Drupal\Component\Utility\Xss;
 
 /**
  * Event Subscriber Http451RedirectSubscriber.
@@ -132,8 +133,8 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
       // If flag = TRUE initialize a new response and set headers for HTTP451 status code.
       if ($found || $list == NULL) {
         $response = new Response();
-        $response->setContent(
-        '<p>' . $node->get($http451_custom_field)->page_content . '</p>
+        $response->setContent('<h1>' . $node->get($http451_custom_field)->page_title . '</h1>' .
+        '<p>' . Xss::filter($node->get($http451_custom_field)->page_content) . '</p>
                     <p>Enforced by: <a href="' . $node->get($http451_custom_field)->blocking_authority . '">' . $node->get($http451_custom_field)->blocking_authority . '</a></p>'
         );
 
