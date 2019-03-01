@@ -68,7 +68,7 @@ class Http451Widget extends WidgetBase implements WidgetInterface {
     $element['page_content'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Reason for censorship: '),
-      '#default_value' => isset($items[$delta]->page_content) ? $items[$delta]->page_content : '<html><head><title>Unavailable For Legal Reasons</title></head><body><h1>451: Unavailable For Legal Reasons</h1><p>This request may not be serviced in the Roman Province of Judea due to the Lex Julia Majestatis, which disallows access to resources hosted on servers deemed to be operated by the People\'s Front of Judea.</p></body></html>',
+      '#default_value' => isset($items[$delta]->page_content) ? $items[$delta]->page_content : '<html><head><title>451: Unavailable For Legal Reasons</title></head><body><p>This request may not be serviced in the Roman Province of Judea due to the Lex Julia Majestatis, which disallows access to resources hosted on servers deemed to be operated by the People\'s Front of Judea.</p></body></html>',
       '#description' => $this->t('If you wish to use a custom message to show up on this page, you can set it here.'),
     ];
 
