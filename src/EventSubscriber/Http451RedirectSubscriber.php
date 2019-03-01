@@ -133,9 +133,8 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
       // If flag = TRUE initialize a new response and set headers for HTTP451 status code.
       if ($found || $list == NULL) {
         $response = new Response();
-        $response->setContent('<h1>' . $node->get($http451_custom_field)->page_title . '</h1>' .
-        '<p>' . Xss::filter($node->get($http451_custom_field)->page_content) . '</p>
-                    <p>Enforced by: <a href="' . $node->get($http451_custom_field)->blocking_authority . '">' . $node->get($http451_custom_field)->blocking_authority . '</a></p>'
+        $response->setContent(
+          '<html><head><title>451 Unavailable For Legal Reasons</title></head><h1>' . $node->get($http451_custom_field)->page_title . '</h1>' . '<p>' . Xss::filter($node->get($http451_custom_field)->page_content) . '</p> <p>Enforced by: <a href="' . $node->get($http451_custom_field)->blocking_authority . '">' . $node->get($http451_custom_field)->blocking_authority . '</a></p></html>'
         );
 
         $response->setStatusCode(Response::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS, 'Unavailable For Legal Reasons');
