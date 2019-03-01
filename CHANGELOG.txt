@@ -1,3 +1,4 @@
+e6d20cc - Fixed title for a http 451 response
 e0828a7 - Updated .gitignore
 19d6ce8 - Added Xss::filter() on output string to protect against XSS attacks
 0407152 - Removed license to conform with Drupal's security advisory coverage policy
