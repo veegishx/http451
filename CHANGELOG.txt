@@ -1,3 +1,8 @@
+e0828a7 - Updated .gitignore
+19d6ce8 - Added Xss::filter() on output string to protect against XSS attacks
+0407152 - Removed license to conform with Drupal's security advisory coverage policy
+2e7dbaa - Updated description for countries_affected field
+cd2be3d - updated CHANGELOG.txt
 60d863f - Fixed typo in README.md
 c0827d3 - Updated module description in README.md
 8a982ea - Updated CHANGELOG.txt
