@@ -1,7 +1,7 @@
-configure_http451:
+configure http451:
   title: 'Module Settings'
   description: 'Configuration permissions for administration'
 
-access_content:
+use http451:
   title: 'Block Page'
   description: 'This will allow http451 module to block user access to certain pages as per RFC 7725'
