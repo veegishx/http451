@@ -7,11 +7,64 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpFoundation\Response;
 use Drupal\Component\Utility\Xss;
+use Drupal\Core\Config\ConfigFactory;
+use \Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Event Subscriber Http451RedirectSubscriber.
  */
 class Http451RedirectSubscriber implements EventSubscriberInterface {
+
+
+  /**
+   * The config object.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $config;
+
+  /**
+   * The storage instance.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $nodeStorage;
+
+  /**
+   * The request object
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+
+  /**
+   * CustomAccessCheck constructor.
+   *
+   * @param \Drupal\Core\Config\ConfigFactory $configFactory
+   *   Used for accessing configuration object factory.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   Used for accessing the entity type manager.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Used for getting the request.
+   */
+  public function __construct(ConfigFactory $configFactory, EntityTypeManagerInterface $entityTypeManager, Request $request) {
+    $this->config = $configFactory->get('http451.settings');
+    $this->nodeStorage = $entityTypeManager->getStorage('node');
+    $this->request = $request;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('entity.manager'),
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -25,27 +78,6 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Get the IP address of the client.
-   *
-   * @return string
-   *
-   *   Returns the IP address of the client as a string
-   */
-  private function getIpAddress() {
-    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-      $client_ip = $_SERVER['HTTP_CLIENT_IP'];
-    }
-    elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-      $client_ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-    }
-    else {
-      $client_ip = \Drupal::request()->getClientIp();
-    }
-
-    return $client_ip;
-  }
-
-  /**
    * Get the origin country of the IP address.
    *
    * @return string
@@ -54,7 +86,6 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
    */
   private function getIpAddressOriginCountry($client_ip) {
     // Load GeoIP API Key.
-    $config = \Drupal::config('http451.settings');
     $api_key = $config->get('geoip_api_key');
 
     // Make API call via a CURL request.
@@ -83,10 +114,10 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
    */
   public function redirectMyContentTypeNode(GetResponseEvent $event) {
     // Load the default configurations.
-    $config = \Drupal::config('http451.settings');
     $http451_custom_field = $config->get('http451.custom_field_name');
 
-    $ip = Http451RedirectSubscriber::getIpAddress();
+    // Get the IP address of the client as string
+    $ip = $this->request->getClientIp();
 
     $request = $event->getRequest();
 
@@ -100,8 +131,7 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
     $current_node_id = (string) $request->attributes->get('node')->id();
 
     // Check if node has $http451_custom_field assigned to it.
-    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
-    $node = $node_storage->load($current_node_id);
+    $node = $this->nodeStorage->load($current_node_id);
     $contains_field = $node->hasField($http451_custom_field);
 
     // Check the status property of $http451_custom_field if it is assigned to the node.
@@ -120,7 +150,7 @@ class Http451RedirectSubscriber implements EventSubscriberInterface {
       // Split comma delimited string of countries into $list array
       // Remove whitespaces and convert to uppercase.
       $countries == NULL ? $list = NULL : $list = array_map('strtoupper', preg_replace('/\s+/', '', (explode(",", $countries))));
-      $client_country = strtoupper(preg_replace('/\s+/', '', Http451RedirectSubscriber::getIpAddressOriginCountry($ip)));
+      $client_country = strtoupper(preg_replace('/\s+/', '', $this->getIpAddressOriginCountry($ip)));
       // If client country is found in list then set flag to TRUE.
       if ($list != NULL) {
         foreach ($list as $list_item) {

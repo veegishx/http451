@@ -33,7 +33,7 @@ class Http451Form extends ConfigFormBase {
     $form = parent::buildForm($form, $form_state);
 
     // Default parameters.
-    $config = \Drupal::config('http451.settings');
+    $config = $this->config('http451.settings');
 
     // Get api key if already set.
     $api_key = $config->get('geoip_api_key');
@@ -66,14 +66,12 @@ class Http451Form extends ConfigFormBase {
    * Form submission callback.
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // The Messenger service.
+    $config = $this->config('http451.settings');
     $values = $form_state->getValues();
 
-    $messenger = \Drupal::messenger();
+    $this->config->set('geoip_api_key', $values['geoip_api_key'])->save();
 
-    \Drupal::configFactory()->getEditable('http451.settings')->set('geoip_api_key', $values['geoip_api_key'])->save();
-
-    $messenger->addStatus($this->t('Your API Key key has been set.'));
+    $this->messenger->addStatus($this->t('Your API Key key has been set.'));
   }
 
 }
